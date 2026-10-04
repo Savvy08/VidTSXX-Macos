@@ -1,0 +1,11 @@
+# Swift Package Manager
+.build/
+build/
+tmp/
+DerivedData/
+
+# macOS
+.DS_Store
+
+# Large runtime binary (automatically fetched by build_app.sh)
+Resources/runtime/

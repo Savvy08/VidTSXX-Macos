@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #0d0e12;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #stage-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    #stage {
+      position: absolute;
+      transform-origin: center center;
+      overflow: hidden;
+      background: #000;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    #placeholder {
+      color: #555;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  </style>
+  <script src="vendor/react.min.js"></script>
+  <script src="vendor/react-dom.min.js"></script>
+  <script src="vendor/babel.min.js"></script>
+  <script src="remotion-shim.js"></script>
+</head>
+<body>
+  <div id="stage-wrapper">
+    <div id="stage">
+      <div id="root">
+        <div id="placeholder">Загрузка композиции...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let compWidth = 1920;
+    let compHeight = 1080;
+    let compFps = 60;
+    let compTotalFrames = 300;
+    let CurrentComponent = null;
+    let rootInstance = null;
+
+    let isPlaying = false;
+    let currentFrame = 0;
+    let lastFrameTimestamp = 0;
+    let lastIpcTimestamp = 0;
+
+    function resizeStage() {
+      const wrapper = document.getElementById('stage-wrapper');
+      const stage = document.getElementById('stage');
+      if (!wrapper || !stage) return;
+
+      const wWidth = wrapper.clientWidth || 800;
+      const wHeight = wrapper.clientHeight || 450;
+
+      const scaleX = wWidth / compWidth;
+      const scaleY = wHeight / compHeight;
+      const scale = Math.min(scaleX, scaleY) * 0.98;
+
+      stage.style.width = compWidth + 'px';
+      stage.style.height = compHeight + 'px';
+      stage.style.transform = `scale(${scale}) translateZ(0)`;
+    }
+
+    window.addEventListener('resize', resizeStage);
+
+    // Плавный цикл воспроизведения на requestAnimationFrame со стабильной синхронизацией
+    function animLoop(timestamp) {
+      if (!isPlaying) return;
+
+      const frameInterval = 1000 / compFps;
+      if (!lastFrameTimestamp) {
+        lastFrameTimestamp = timestamp;
+      }
+
+      const delta = timestamp - lastFrameTimestamp;
+      if (delta >= frameInterval) {
+        // Вычисляем сколько кадров нужно продвинуть (для компенсации любого лага тайминга)
+        const framesToAdvance = Math.floor(delta / frameInterval);
+        lastFrameTimestamp = timestamp - (delta % frameInterval);
+
+        currentFrame = (currentFrame + framesToAdvance) % compTotalFrames;
+        window.remotionPlayerAPI.setFrame(currentFrame);
+
+        // Дросселирование IPC обновлений в Swift (раз в 100мс), чтобы не блокировать поток рендера
+        if (timestamp - lastIpcTimestamp >= 100) {
+          lastIpcTimestamp = timestamp;
+          if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.frameChanged) {
+            window.webkit.messageHandlers.frameChanged.postMessage(currentFrame);
+          }
+        }
+      }
+
+      requestAnimationFrame(animLoop);
+    }
+
+    window.play = function() {
+      if (isPlaying) return;
+      isPlaying = true;
+      lastFrameTimestamp = 0;
+      lastIpcTimestamp = 0;
+      requestAnimationFrame(animLoop);
+    };
+
+    window.pause = function() {
+      isPlaying = false;
+      // Отправляем точный финальный кадр при паузе
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.frameChanged) {
+        window.webkit.messageHandlers.frameChanged.postMessage(currentFrame);
+      }
+    };
+
+    window.seekFrame = function(frame) {
+      currentFrame = Math.max(0, Math.min(frame, compTotalFrames - 1));
+      if (window.remotionPlayerAPI) {
+        window.remotionPlayerAPI.setFrame(currentFrame);
+      }
+    };
+
+    window.loadTSX = function(rawCode, config) {
+      try {
+        if (config) {
+          compWidth = config.width || 1920;
+          compHeight = config.height || 1080;
+          compFps = config.fps || 60;
+          compTotalFrames = config.durationInFrames || 300;
+          window.remotionPlayerAPI.setConfig(config);
+        }
+        currentFrame = 0;
+        resizeStage();
+
+        let processedCode = rawCode
+          .replace(/import\s+React.*?from\s+['"]react['"];?/g, '')
+          .replace(/import\s+\{([^}]+)\}\s+from\s+['"]remotion['"];?/g, (m, imports) => {
+            return `const { ${imports} } = window.Remotion;`;
+          })
+          .replace(/export\s+default\s+([A-Za-z0-9_]+);?/g, 'window.__ExportedComp = $1;')
+          .replace(/export\s+const\s+compositionConfig\s*=.*?;/s, '');
+
+        const transpiled = Babel.transform(processedCode, {
+          presets: ['react', 'typescript'],
+          filename: 'comp.tsx'
+        }).code;
+
+        const runFn = new Function('React', 'window', transpiled);
+        window.__ExportedComp = null;
+        runFn(React, window);
+
+        if (window.__ExportedComp) {
+          CurrentComponent = window.__ExportedComp;
+          const container = document.getElementById('root');
+          if (!rootInstance) {
+            rootInstance = ReactDOM.createRoot(container);
+          }
+          rootInstance.render(React.createElement(CurrentComponent));
+          return true;
+        }
+        return false;
+      } catch (err) {
+        const container = document.getElementById('root');
+        container.innerHTML = `<div style="color:#ff5577;padding:20px;font-family:monospace;font-size:14px;">Ошибка: ${err.message}</div>`;
+        return false;
+      }
+    };
+  </script>
+</body>
+</html>
