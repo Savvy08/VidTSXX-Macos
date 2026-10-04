@@ -17,23 +17,18 @@ rm -rf "$APP_DIR"
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
 
-# Копирование бинарника
 cp .build/arm64-apple-macosx/release/$APP_NAME "$MACOS_DIR/$APP_NAME"
 
-# Копирование Info.plist
 cp Info.plist "$CONTENTS_DIR/Info.plist"
 
-# Копирование иконки
 if [ -f "Resources/AppIcon.icns" ]; then
     cp Resources/AppIcon.icns "$RESOURCES_DIR/AppIcon.icns"
 fi
 
-# Копирование веб-контейнера плеера
 if [ -d "Resources/web" ]; then
     cp -R Resources/web "$RESOURCES_DIR/"
 fi
 
-# Проверка и копирование автономного рантайма
 if [ ! -f "Resources/runtime/bin/node" ]; then
     echo "Подготовка автономного рантайма Node.js..."
     mkdir -p Resources/runtime/bin
@@ -45,7 +40,6 @@ if [ -d "Resources/runtime" ]; then
     cp -R Resources/runtime "$RESOURCES_DIR/"
 fi
 
-# Подпись ad-hoc
 echo "Подпись приложения..."
 codesign --force --deep --sign - "$APP_DIR"
 
