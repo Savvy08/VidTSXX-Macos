@@ -37,9 +37,8 @@ Requires macOS 14.0 or later
 ./Scripts/build_app.sh
 ```
 ##### Acknowledgments
-
-Inspired by the original [VidTSX Desktop](https://github.com/hassancs91/vidtsx-desktop) for Windows by @hassancs91.
-
+* Original project author: [@hassancs91](https://github.com)
+* Repository link: [vidtsx-desktop](https://github.com/vidtsx-desktop)
 
 -----
 
@@ -63,5 +62,5 @@ Inspired by the original [VidTSX Desktop](https://github.com/hassancs91/vidtsx-d
 ./Scripts/build_app.sh
 ```
 ##### Благодарности
-
-Вдохновлено оригинальным проектом [VidTSX Desktop](https://github.com/hassancs91/vidtsx-desktop) для Windows от автора @hassancs91.
+* Автор оригинального проекта: [@hassancs91](https://github.com)
+* Ссылка на репозиторий: [vidtsx-desktop](https://github.com/vidtsx-desktop)
