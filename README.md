@@ -8,6 +8,13 @@
 Native macOS app for working with .tsx files and exporting them to MP4.
 </p>
 
+### Review
+
+
+https://github.com/user-attachments/assets/20fee1cb-7236-4c03-8f08-1c1f2c09cf53
+
+
+
 
 ### Features
 - **Code Import**: Paste TSX code directly into the app or drag and drop files.
