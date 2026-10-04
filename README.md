@@ -36,6 +36,11 @@ Requires macOS 14.0 or later
 ```bash
 ./Scripts/build_app.sh
 ```
+##### Acknowledgments
+
+Inspired by the original [VidTSX Desktop](https://github.com/hassancs91/vidtsx-desktop) for Windows by @hassancs91.
+
+
 -----
 
 ### Russian text:
@@ -57,3 +62,6 @@ Requires macOS 14.0 or later
 ```bash
 ./Scripts/build_app.sh
 ```
+##### Благодарности
+
+Вдохновлено оригинальным проектом [VidTSX Desktop](https://github.com/hassancs91/vidtsx-desktop) для Windows от автора @hassancs91.
