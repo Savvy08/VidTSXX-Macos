@@ -2,10 +2,11 @@
   <img src="https://github.com/user-attachments/assets/ca5d534b-c335-4d01-bc08-3c112add8026" alt="VidTSX" width="100%" />
 </p>
 
-<h1 align="center">VidTSX for macOS</h1>
+<h1 align="center">VidTSXX for macOS</h1>
 
 <p align="center">
 Native macOS app for working with .tsx files and exporting them to MP4.
+Alternative to VidTSX
 </p>
 
 ### Review
