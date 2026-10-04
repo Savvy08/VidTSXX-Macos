@@ -12,7 +12,6 @@ public struct SettingsView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 14) {
-                // Карточка 1: Язык интерфейса
                 VStack(alignment: .leading, spacing: 8) {
                     Text(loc.t("Язык интерфейса", "Interface Language"))
                         .font(.system(size: 13, weight: .semibold))
@@ -37,7 +36,6 @@ public struct SettingsView: View {
                         .stroke(Color.white.opacity(0.08), lineWidth: 1)
                 )
                 
-                // Карточка 2: Папка сохранения
                 VStack(alignment: .leading, spacing: 8) {
                     Text(loc.t("Папка для сохранения", "Export Destination"))
                         .font(.system(size: 13, weight: .semibold))
@@ -72,7 +70,6 @@ public struct SettingsView: View {
                         .stroke(Color.white.opacity(0.08), lineWidth: 1)
                 )
                 
-                // Карточка 3: Режимы нагрузки
                 VStack(alignment: .leading, spacing: 12) {
                     Text(loc.t("Режим нагрузки CPU", "CPU Load Mode"))
                         .font(.system(size: 13, weight: .semibold))
@@ -137,7 +134,6 @@ public struct SettingsView: View {
                         .stroke(Color.white.opacity(0.08), lineWidth: 1)
                 )
                 
-                // Карточка 4: Очистка кэша
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(loc.t("Кэш программы", "App Cache"))

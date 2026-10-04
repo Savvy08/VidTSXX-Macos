@@ -30,7 +30,6 @@ public struct PreviewView: View {
     
     public var body: some View {
         VStack(spacing: 8) {
-            // Компактная верхняя плашка информации
             HStack(spacing: 8) {
                 Text(fileURL.lastPathComponent)
                     .font(.system(size: 13, weight: .semibold))
@@ -52,7 +51,6 @@ public struct PreviewView: View {
             .padding(.horizontal, 14)
             .padding(.top, 6)
             
-            // Парящий экран плеера
             ZStack {
                 Color.black
                 
@@ -73,7 +71,6 @@ public struct PreviewView: View {
             .shadow(color: .black.opacity(0.4), radius: 12, x: 0, y: 6)
             .padding(.horizontal, 14)
             
-            // Таймлайн управления
             HStack(spacing: 12) {
                 Button(action: {
                     isPlaying.toggle()

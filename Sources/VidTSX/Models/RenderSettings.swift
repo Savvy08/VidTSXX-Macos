@@ -25,13 +25,11 @@ public enum ConcurrencyMode: String, CaseIterable, Identifiable, Codable, Sendab
 }
 
 public struct RenderSettings: Codable, Equatable, Sendable {
-    // Режимы нагрузки
     public var concurrency: ConcurrencyMode = .balanced
     public var enableVideoToolbox: Bool = true
     public var backgroundPriority: Bool = true
     public var limitMemoryMB: Int = 1024
     
-    // Папка экспорта по умолчанию
     public var exportDirectoryPath: String = {
         let desktop = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
         return desktop?.path ?? (NSHomeDirectory() + "/Desktop")

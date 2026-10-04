@@ -40,12 +40,10 @@ public struct ContentView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            // Верхняя парящая панель
             headerView
             
             Divider().background(Color.white.opacity(0.08))
             
-            // Основное содержимое
             ZStack {
                 Color(red: 0.07, green: 0.07, blue: 0.09).ignoresSafeArea()
                 
@@ -105,7 +103,6 @@ public struct ContentView: View {
                     onReset: resetFile
                 )
                 
-                // Нижняя панель действий
                 bottomActionBar(cfg: cfg)
             } else {
                 DropZoneView(
@@ -116,7 +113,6 @@ public struct ContentView: View {
                 .padding(16)
             }
             
-            // Прогресс рендера
             if renderEngine.state != .idle {
                 RenderProgressView(
                     engine: renderEngine,
@@ -208,7 +204,6 @@ public struct ContentView: View {
         self.componentName = result.componentName
         self.tsxCode = result.code
         
-        // Создание виртуального URL для отображения имени
         let tempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(result.config.id).tsx")
         try? rawCode.write(to: tempURL, atomically: true, encoding: .utf8)
         self.selectedFileURL = tempURL

@@ -9,7 +9,7 @@ def create_dmg_background():
     img = Image.new('RGBA', (w, h), bg_color)
     draw = ImageDraw.Draw(img)
     
-    arrow_color = (45, 48, 58, 255) # Темный графит
+    arrow_color = (45, 48, 58, 255)
     line_width = 8
     
     start_x = 540

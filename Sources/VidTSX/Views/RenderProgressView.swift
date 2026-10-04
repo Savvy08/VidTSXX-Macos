@@ -32,7 +32,6 @@ public struct RenderProgressView: View {
                 }
             }
             
-            // Прогресс бар
             VStack(alignment: .leading, spacing: 6) {
                 ProgressView(value: engine.progress.percent, total: 1.0)
                     .progressViewStyle(.linear)
@@ -51,7 +50,6 @@ public struct RenderProgressView: View {
                 }
             }
             
-            // Завершено успешно
             if engine.state == .completed, let url = outputURL {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")

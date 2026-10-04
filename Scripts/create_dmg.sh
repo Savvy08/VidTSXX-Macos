@@ -3,7 +3,6 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-# Отмонтировать старые тома VidTSX если есть
 for m in $(hdiutil info | grep '/Volumes/VidTSX' | awk '{print $1}'); do
     hdiutil detach "$m" -force 2>/dev/null || true
 done
@@ -22,13 +21,10 @@ TMP_DMG="./build/tmp_rw.dmg"
 rm -rf "$DMG_STAGING" "$TMP_DMG" "$FINAL_DMG"
 mkdir -p "$DMG_STAGING/.background"
 
-# 1. Копирование приложения
 cp -R "./build/VidTSX.app" "$DMG_STAGING/"
 
-# 2. Ярлык на Applications
 ln -s /Applications "$DMG_STAGING/Applications"
 
-# 3. Фон окна DMG
 cp "Resources/dmg_background.png" "$DMG_STAGING/.background/dmg_background.png"
 chmod -R 755 "$DMG_STAGING/.background"
 chmod 644 "$DMG_STAGING/.background/dmg_background.png"

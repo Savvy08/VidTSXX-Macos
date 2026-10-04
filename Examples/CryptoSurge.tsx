@@ -9,10 +9,6 @@ import {
   Sequence,
 } from 'remotion';
 
-// =============================================================================
-// COMPOSITION CONFIG
-// =============================================================================
-
 export const compositionConfig = {
   id: 'CryptoSurge',
   durationInSeconds: 5,
@@ -20,10 +16,6 @@ export const compositionConfig = {
   width: 1920,
   height: 1080,
 };
-
-// =============================================================================
-// STYLE CONSTANTS
-// =============================================================================
 
 const COLORS = {
   primary: '#00ff88',
@@ -46,10 +38,6 @@ const EASINGS = {
   easeInOut: Easing.bezier(0.37, 0, 0.63, 1),
   overshoot: Easing.bezier(0.34, 1.56, 0.64, 1),
 };
-
-// =============================================================================
-// PRE-GENERATED DATA
-// =============================================================================
 
 const seededRandom = (seed: number): number => {
   const x = Math.sin(seed * 9999) * 10000;
@@ -108,10 +96,6 @@ const chartPoints = [
 const chartPath = chartPoints
   .map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`)
   .join(' ');
-
-// =============================================================================
-// MAIN COMPONENT
-// =============================================================================
 
 const CryptoSurge: React.FC = () => {
   const frame = useCurrentFrame();

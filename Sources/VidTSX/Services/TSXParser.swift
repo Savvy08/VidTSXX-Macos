@@ -15,36 +15,30 @@ public final class TSXParser {
         var width = 1920
         var height = 1080
         
-        // 1. Поиск id
         if let match = matchValue(in: code, pattern: #"\bid\s*:\s*['"]([^'"]+)['"]"#) {
             id = match
         }
         
-        // 2. Поиск durationInSeconds
         if let match = matchValue(in: code, pattern: #"\bdurationInSeconds\s*:\s*([0-9]+(?:\.[0-9]+)?)"#),
            let val = Double(match) {
             durationInSeconds = val
         }
         
-        // 3. Поиск fps
         if let match = matchValue(in: code, pattern: #"\bfps\s*:\s*([0-9]+)"#),
            let val = Int(match) {
             fps = val
         }
         
-        // 4. Поиск width
         if let match = matchValue(in: code, pattern: #"\bwidth\s*:\s*([0-9]+)"#),
            let val = Int(match) {
             width = val
         }
         
-        // 5. Поиск height
         if let match = matchValue(in: code, pattern: #"\bheight\s*:\s*([0-9]+)"#),
            let val = Int(match) {
             height = val
         }
         
-        // 6. Поиск имени экспортируемого компонента
         var componentName = id
         if let match = matchValue(in: code, pattern: #"export\s+default\s+([A-Za-z0-9_]+)"#) {
             componentName = match

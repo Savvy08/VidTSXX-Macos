@@ -86,8 +86,7 @@
     }
 
     window.addEventListener('resize', resizeStage);
-
-    // Плавный цикл воспроизведения на requestAnimationFrame со стабильной синхронизацией
+ 
     function animLoop(timestamp) {
       if (!isPlaying) return;
 
@@ -98,14 +97,12 @@
 
       const delta = timestamp - lastFrameTimestamp;
       if (delta >= frameInterval) {
-        // Вычисляем сколько кадров нужно продвинуть (для компенсации любого лага тайминга)
         const framesToAdvance = Math.floor(delta / frameInterval);
         lastFrameTimestamp = timestamp - (delta % frameInterval);
 
         currentFrame = (currentFrame + framesToAdvance) % compTotalFrames;
         window.remotionPlayerAPI.setFrame(currentFrame);
 
-        // Дросселирование IPC обновлений в Swift (раз в 100мс), чтобы не блокировать поток рендера
         if (timestamp - lastIpcTimestamp >= 100) {
           lastIpcTimestamp = timestamp;
           if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.frameChanged) {
@@ -127,7 +124,6 @@
 
     window.pause = function() {
       isPlaying = false;
-      // Отправляем точный финальный кадр при паузе
       if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.frameChanged) {
         window.webkit.messageHandlers.frameChanged.postMessage(currentFrame);
       }

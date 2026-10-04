@@ -21,7 +21,6 @@ public final class VideoToolboxEncoder {
     }
     
     public func start() throws {
-        // Удалить старый файл если существует
         try? FileManager.default.removeItem(at: outputURL)
         
         let writer = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
@@ -31,7 +30,7 @@ public final class VideoToolboxEncoder {
             AVVideoWidthKey: width,
             AVVideoHeightKey: height,
             AVVideoCompressionPropertiesKey: [
-                AVVideoAverageBitRateKey: width * height * 8, // Высокое качество
+                AVVideoAverageBitRateKey: width * height * 8,
                 AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel
             ]
         ]

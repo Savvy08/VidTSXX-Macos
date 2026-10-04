@@ -1,4 +1,3 @@
-// Remotion client runtime shim for WebKit
 (function(window) {
     let currentFrame = 0;
     let videoConfig = {
@@ -44,10 +43,8 @@
         return cfg;
     }
 
-    // Cubic bezier implementation
     function cubicBezier(x1, y1, x2, y2) {
         return function(t) {
-            // Approximation for smooth easing
             const cx = 3 * x1;
             const bx = 3 * (x2 - x1) - cx;
             const ax = 1 - cx - bx;
@@ -80,7 +77,6 @@
             return outputRange[0] || 0;
         }
 
-        // Clamp or extrapolate
         if (input <= inputRange[0]) {
             if (extrapolateLeft === 'clamp') return outputRange[0];
             if (extrapolateLeft === 'identity') return input;
@@ -91,7 +87,6 @@
             if (extrapolateRight === 'identity') return input;
         }
 
-        // Find segment
         let segment = 0;
         for (let i = 1; i < inputRange.length; i++) {
             if (input <= inputRange[i]) {

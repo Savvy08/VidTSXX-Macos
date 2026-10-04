@@ -9,3 +9,9 @@ DerivedData/
 
 # Large runtime binary (automatically fetched by build_app.sh)
 Resources/runtime/
+
+# Internal docs and plans
+plan*.md
+fix*.md
+Fix*.md
+changes*.md

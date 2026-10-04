@@ -15,7 +15,6 @@ public struct CodeImportSheet: View {
     
     public var body: some View {
         VStack(spacing: 14) {
-            // Заголовок
             HStack {
                 Text(loc.t("Импорт кода TSX", "Import TSX Code"))
                     .font(.system(size: 14, weight: .bold))
@@ -34,7 +33,6 @@ public struct CodeImportSheet: View {
                 .controlSize(.small)
             }
             
-            // Поле для вставки кода
             TextEditor(text: $codeText)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(.white)
@@ -48,7 +46,6 @@ public struct CodeImportSheet: View {
                 )
                 .frame(minHeight: 260)
             
-            // Кнопки действий
             HStack {
                 Button(loc.t("Отмена", "Cancel")) {
                     isPresented = false

@@ -14,7 +14,6 @@ public final class RenderEngine: ObservableObject {
     
     public init() {}
     
-    // Аппаратный рендер через WebKit и VideoToolbox
     @MainActor
     public func renderWithWebKit(
         webView: WKWebView,
@@ -63,7 +62,6 @@ public final class RenderEngine: ObservableObject {
                 return
             }
             
-            // Переход на кадр в WebKit
             await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
                 DispatchQueue.main.async {
                     webView.evaluateJavaScript("window.seekFrame(\(frame));") { _, _ in
@@ -72,10 +70,8 @@ public final class RenderEngine: ObservableObject {
                 }
             }
             
-            // Задержка на отрисовку DOM
-            try? await Task.sleep(nanoseconds: 12_000_000) // 12мс
+            try? await Task.sleep(nanoseconds: 12_000_000)
             
-            // Снятие кадра
             let nsImage: NSImage? = await withCheckedContinuation { continuation in
                 DispatchQueue.main.async {
                     webView.takeSnapshot(with: snapshotConfig) { img, err in
@@ -91,7 +87,6 @@ public final class RenderEngine: ObservableObject {
             
             _ = encoder.appendFrame(cgImage: cgImage, frameIndex: frame)
             
-            // Обновление прогресса
             if frame % 5 == 0 || frame == total - 1 {
                 let current = frame + 1
                 let elapsed = Date().timeIntervalSince(startTime)

@@ -48,7 +48,6 @@ public struct RemotionPlayerView: NSViewRepresentable {
     }
     
     public func updateNSView(_ nsView: WKWebView, context: Context) {
-        // Управление воспроизведением внутри WebKit
         if context.coordinator.lastPlayingState != isPlaying {
             context.coordinator.lastPlayingState = isPlaying
             if isPlaying {
@@ -58,7 +57,6 @@ public struct RemotionPlayerView: NSViewRepresentable {
             }
         }
         
-        // Ручная перемотка ползунком
         if !isPlaying && context.coordinator.lastReportedFrame != currentFrame {
             context.coordinator.lastReportedFrame = currentFrame
             nsView.evaluateJavaScript("if (window.seekFrame) { window.seekFrame(\(currentFrame)); }")
